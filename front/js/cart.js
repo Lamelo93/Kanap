@@ -1,14 +1,21 @@
 //variables
 let cartList = localStorage.getItem("cart");
 let cart = JSON.parse(cartList);
+let totalArticles = document.getElementById("totalQuantity");
 console.log(cart);
-let product = document.getElementsByClassName("cart__item");
+
+//Fonctions
+renderCartitems();
+
+//Evenements
 
 
-function renderCartitems() { 
-    cart.forEach((item) => {
-        
-        document.getElementById("cart__items").innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.color}">
+//Affichage des articles sélectionnés dans le panier
+function renderCartitems() {
+  cart.forEach((item) => {
+    document.getElementById(
+      "cart__items"
+    ).innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.color}">
         <div class="cart__item__img">
           <img src="${item.imgsrc}" alt="${item.imgalt}">
         </div>
@@ -28,35 +35,48 @@ function renderCartitems() {
             </div>
           </div>
         </div>
-      </article>`
-    });
-};
-
-function totalQuantity() {
-    let quantity = 0;
-    cart.forEach((item) => {
-        quantity += item.number;
-    });
-
-    document.getElementById("totalQuantity").textContent = quantity;
-};
-
-function totalPrice() {
-    let total = 0;
-    cart.forEach((item) => {
-        total += item.price;
-    });
-    document.getElementById("totalPrice").textContent = total;
-};
-
-
-//Modifier
-function addMore() {
-    quantity++;
+      </article>`;
+  });
 }
 
-totalPrice();
-totalQuantity();
-renderCartitems();
-let quantities = document.querySelector("input[name ='itemQuantity']");
-console.log(quantities.value);
+//Calcul de la quantité totale d'articles dans le panier
+let cartQuantity = 0;
+let finalQuantity = 0;
+  cart.forEach((item) => {
+      cartQuantity += item.number;
+  });
+  totalArticles.innerText = cartQuantity ;
+
+  let currentQuantity = document.querySelectorAll(".itemQuantity");
+
+
+  currentQuantity.forEach(article => {
+    article.addEventListener('change', function totalQuantity(){
+      console.log(article.value);
+      if (article.value++) {
+        cartQuantity ++;
+      }
+      totalArticles.innerText = cartQuantity ;
+    }); 
+  });
+
+//Calcul du prix total des articles du panier
+function totalPrice() {
+  let total = 0;
+  cart.forEach((item) => {
+    total += item.price;
+  });
+  document.getElementById("totalPrice").textContent = total;
+}
+
+//Affichage de la quantité et du prix total de la commande
+function total() {
+  totalPrice();
+  totalQuantity();
+}
+
+
+
+
+
+
