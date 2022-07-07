@@ -105,15 +105,18 @@ function addToCart() {
     number: Number(selectedNumber),
   };
 
-  let item = cart.find(product => product.color === productToAdd.color);
-  if (item) {
-    product.number += productToAdd.number;
+  if (cart.length >= 1) {
+    for (let i = 0; i < cart.length; i++) {
+      const element = cart[i];
+      if (productToAdd.color === element.color) {
+        element.number += Number(productToAdd.number);
+      } else {
+        cart.push(productToAdd);
+      }
+    }
   } else {
-    cart.push(item);
+    cart.push(productToAdd);
   }
-  
-
-  
 
   console.log(cart);
   console.log(cart.length);

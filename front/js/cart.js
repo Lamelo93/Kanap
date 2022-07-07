@@ -42,10 +42,10 @@ function renderCartitems() {
 //Calcul de la quantité totale d'articles dans le panier
 let itemQuantity = document.querySelectorAll(".itemQuantity");
 let cartQuantity = 0;
+
 /*cart.forEach((item) => {
   cartQuantity += item.number;
 });*/
-
 
 /*itemQuantity.forEach(item => {
    
@@ -55,22 +55,21 @@ let cartQuantity = 0;
   });
 });*/
 
-/*cart.forEach((item) => {
-  cartQuantity += item.number;
+cart.forEach((item) => {
+  cartQuantity += Number(item.number);
   totalQuantity.innerText = cartQuantity;
-});*/
+});
 
 //Calcul du prix total des articles du panier
 function totalPrice() {
   let total = 0;
   cart.forEach((item) => {
-    total += item.price*item.number;
+    total += item.price * item.number;
   });
   document.getElementById("totalPrice").textContent = total;
 }
 
-
-function modifieQ() {
+/*function modifieQ() {
 
   let modify = document.querySelectorAll('.itemQuantity');
   // se repete tant qu'il y a des produit dans le panier 
@@ -92,4 +91,4 @@ function modifieQ() {
   }
 }
 
-modifieQ();
+modifieQ();*/
