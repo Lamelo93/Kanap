@@ -105,11 +105,18 @@ function addToCart() {
     number: Number(selectedNumber),
   };
 
-  if (productToAdd.color != "" && productToAdd.number >= 1) {
-    cart.push(productToAdd);
+  let item = cart.find(product => product.color === productToAdd.color);
+  if (item) {
+    product.number += productToAdd.number;
+  } else {
+    cart.push(item);
   }
+  
+
+  
 
   console.log(cart);
+  console.log(cart.length);
   console.log(productToAdd);
   let cartList = JSON.stringify(cart);
   localStorage.setItem("cart", cartList);

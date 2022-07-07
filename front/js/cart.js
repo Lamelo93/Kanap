@@ -1,14 +1,14 @@
 //variables
 let cartList = localStorage.getItem("cart");
 let cart = JSON.parse(cartList);
-let totalArticles = document.getElementById("totalQuantity");
+let totalQuantity = document.getElementById("totalQuantity");
+let cartItems = document.querySelectorAll(".cart__item");
 console.log(cart);
+console.log(totalQuantity.textContent);
 
 //Fonctions
 renderCartitems();
-
-//Evenements
-
+totalPrice();
 
 //Affichage des articles sélectionnés dans le panier
 function renderCartitems() {
@@ -40,43 +40,56 @@ function renderCartitems() {
 }
 
 //Calcul de la quantité totale d'articles dans le panier
+let itemQuantity = document.querySelectorAll(".itemQuantity");
 let cartQuantity = 0;
-let finalQuantity = 0;
-  cart.forEach((item) => {
-      cartQuantity += item.number;
+/*cart.forEach((item) => {
+  cartQuantity += item.number;
+});*/
+
+
+/*itemQuantity.forEach(item => {
+   
+  item.addEventListener('change', function total(){
+    cartQuantity += Number(item.value);
+    totalQuantity.innerText += item.value - cartQuantity ;
   });
-  totalArticles.innerText = cartQuantity ;
+});*/
 
-  let currentQuantity = document.querySelectorAll(".itemQuantity");
-
-
-  currentQuantity.forEach(article => {
-    article.addEventListener('change', function totalQuantity(){
-      console.log(article.value);
-      if (article.value++) {
-        cartQuantity ++;
-      }
-      totalArticles.innerText = cartQuantity ;
-    }); 
-  });
+/*cart.forEach((item) => {
+  cartQuantity += item.number;
+  totalQuantity.innerText = cartQuantity;
+});*/
 
 //Calcul du prix total des articles du panier
 function totalPrice() {
   let total = 0;
   cart.forEach((item) => {
-    total += item.price;
+    total += item.price*item.number;
   });
   document.getElementById("totalPrice").textContent = total;
 }
 
-//Affichage de la quantité et du prix total de la commande
-function total() {
-  totalPrice();
-  totalQuantity();
+
+function modifieQ() {
+
+  let modify = document.querySelectorAll('.itemQuantity');
+  // se repete tant qu'il y a des produit dans le panier 
+  for (let i = 0; i < modify.length; i++) {
+      modify[i].addEventListener('change', () => {
+          // récuperer l'id, la couleur et la quantity
+          let _ID = modify[i].closest("article").dataset.id;
+          let _COLOR = modify[i].closest("article").dataset.color;
+          let _QUANTITY = modify[i].value;
+          // renvoie le produit qui contient l'id et la couleur 
+          let produit = cart.find(element => element._id == _ID && element.colors == _COLOR);
+          produit.quantity = _QUANTITY;
+          cart[i].quantity = produit.quantity;
+          localStorage.setItem("obj", JSON.stringify(cart));
+
+          location.reload();
+
+      })
+  }
 }
 
-
-
-
-
-
+modifieQ();
