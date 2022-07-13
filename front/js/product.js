@@ -187,7 +187,7 @@ let addButton = document.getElementById("addToCart");
                  * checks if the item is already in the cart
                  * @return the product(s) present in productLocalStorage
                  */
-                const Find = produitLocalStorage.find((element) => element._id === _id && element.colors === Couleur);
+                const Find = produitLocalStorage.find((element) => element.id === Id && element.colors === Couleur);
                 console.log(Find);
                 // if the product is already in the basket
                 if (Find) {
