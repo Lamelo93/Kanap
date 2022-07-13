@@ -29,6 +29,7 @@ async function getapi(url) {
   showImage(data);
   showTitle(data);
   showPrice(data);
+  panier(data);
 }
 
 //Afficher les données produit
@@ -137,9 +138,7 @@ let addButton = document.getElementById("addToCart");
     btn.addEventListener("click", () => {
         let quantity = selectedNumber;
         let couleurs = selectedColor;
-        let Id = productId;
         console.log("quantité : " + quantity);
-        console.log("id : " + Id);
         console.log("couleurs : " + couleurs);
 
         // check if color and quantity are not empty
@@ -148,7 +147,7 @@ let addButton = document.getElementById("addToCart");
             // get the selected color and quantity
             let Couleur = couleurs;
             let Quantity = Number(quantity);
-            let id = Id;
+            let Id = article._id;
             
 
 
@@ -157,11 +156,12 @@ let addButton = document.getElementById("addToCart");
              * @return Objet json 
              */
             let obj = {
-                id: id,
+                id: Id,
                 colors: Couleur,
                 quantity: Number(Quantity),
 
             }
+            console.log(obj);
             /**
              * @return the products present in localStorage.getItem('obj');
              */
@@ -217,4 +217,4 @@ let addButton = document.getElementById("addToCart");
         }
     })};
 
-    panier();
+    
