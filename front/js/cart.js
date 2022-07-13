@@ -1,5 +1,6 @@
 //variables
-let cartList = localStorage.getItem("cart");
+const apiURL = "http://localhost:3000/api/products";
+let cartList = localStorage.getItem("obj");
 let cart = JSON.parse(cartList);
 let totalQuantity = document.getElementById("totalQuantity");
 let cartItems = document.querySelectorAll(".cart__item");
@@ -7,22 +8,42 @@ console.log(cart);
 console.log(totalQuantity.textContent);
 
 //Fonctions
-renderCartitems();
-totalPrice();
+async function getapi(id) {
+  const response = await fetch(`${apiURL}/${id}`) .catch (function(err) {
+    console.error(error);
+  });
+
+  let data = await response.json();
+  console.log(data);
+
+ 
+  
+}
+
+
+
 
 //Affichage des articles sélectionnés dans le panier
-function renderCartitems() {
+function renderCartitems(data) {
+
+  
   cart.forEach((item) => {
+
+  getapi(item.id)
+  
+
+
+
     document.getElementById(
       "cart__items"
-    ).innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.color}">
+    ).innerHTML += `<article class="cart__item" data-id="${article.id}" data-color="${item.colors}">
         <div class="cart__item__img">
           <img src="${item.imgsrc}" alt="${item.imgalt}">
         </div>
         <div class="cart__item__content">
           <div class="cart__item__content__description">
             <h2>${item.name}</h2>
-            <p>${item.color}</p>
+            <p>${item.colors}</p>
             <p>${item.price}</p>
           </div>
           <div class="cart__item__content__settings">
@@ -55,21 +76,21 @@ let cartQuantity = 0;
   });
 });*/
 
-cart.forEach((item) => {
+/*cart.forEach((item) => {
   cartQuantity += Number(item.number);
   totalQuantity.innerText = cartQuantity;
-});
+});*/
 
 //Calcul du prix total des articles du panier
-function totalPrice() {
+/*function totalPrice() {
   let total = 0;
   cart.forEach((item) => {
     total += item.price * item.number;
   });
   document.getElementById("totalPrice").textContent = total;
-}
+}*/
 
-/*function modifieQ() {
+function modifieQ() {
 
   let modify = document.querySelectorAll('.itemQuantity');
   // se repete tant qu'il y a des produit dans le panier 
@@ -91,4 +112,4 @@ function totalPrice() {
   }
 }
 
-modifieQ();*/
+modifieQ();

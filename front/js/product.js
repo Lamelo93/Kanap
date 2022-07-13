@@ -89,9 +89,6 @@ function selectNumber(input) {
   console.log(selectedNumber);
 }
 
-//Ajouter produit au panier
-let addButton = document.getElementById("addToCart");
-
 /*addButton.addEventListener("click", addToCart);*/
 
 /*function addToCart() {
@@ -106,22 +103,6 @@ let addButton = document.getElementById("addToCart");
     number: Number(selectedNumber),
   };
 
-  if (cart.length >= 1) {
-    for (let i = 0; i < cart.length; i++) {
-      const element = cart[i];
-      if (productToAdd.color === element.color) {
-        element.number += Number(productToAdd.number);
-      } else {
-        cart.push(productToAdd);
-      }
-    }
-  } else {
-    cart.push(productToAdd);
-  }
-
-  console.log(cart);
-  console.log(cart.length);
-  console.log(productToAdd);
   let cartList = JSON.stringify(cart);
   localStorage.setItem("cart", cartList);
 }*/
@@ -217,4 +198,4 @@ let addButton = document.getElementById("addToCart");
         }
     })};
 
-    
+    console.log(localStorage);
