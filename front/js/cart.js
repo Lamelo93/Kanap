@@ -4,10 +4,20 @@ let cartList = localStorage.getItem("obj");
 let cart = JSON.parse(cartList);
 let totalQuantity = document.getElementById("totalQuantity");
 let cartItems = document.querySelectorAll(".cart__item");
-console.log(cart);
-console.log(totalQuantity.textContent);
+console.log(localStorage);
 
 //Fonctions
+if (cart !== null) {
+  cart.forEach((item)=> {
+    console.log(cart);
+    let itemId = item.id
+    getapi(itemId);
+  });
+} else {
+  window.alert("cart is empty");
+}
+
+
 async function getapi(id) {
   const response = await fetch(`${apiURL}/${id}`) .catch (function(err) {
     console.error(error);
@@ -16,27 +26,24 @@ async function getapi(id) {
   let data = await response.json();
   console.log(data);
 
- 
-  
+ let price = data.price;
+ renderCartitems(price);
 }
 
 
 
 
 //Affichage des articles sélectionnés dans le panier
-function renderCartitems(data) {
+function renderCartitems(price) {
 
   
   cart.forEach((item) => {
-
-  getapi(item.id)
   
-
 
 
     document.getElementById(
       "cart__items"
-    ).innerHTML += `<article class="cart__item" data-id="${article.id}" data-color="${item.colors}">
+    ).innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.colors}">
         <div class="cart__item__img">
           <img src="${item.imgsrc}" alt="${item.imgalt}">
         </div>
@@ -44,12 +51,12 @@ function renderCartitems(data) {
           <div class="cart__item__content__description">
             <h2>${item.name}</h2>
             <p>${item.colors}</p>
-            <p>${item.price}</p>
+            <p>${price}</p>
           </div>
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
               <p>Qté : </p>
-              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.number}">
+              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
             </div>
             <div class="cart__item__content__settings__delete">
               <p class="deleteItem">Supprimer</p>
@@ -90,7 +97,7 @@ let cartQuantity = 0;
   document.getElementById("totalPrice").textContent = total;
 }*/
 
-function modifieQ() {
+/*function modifieQ() {
 
   let modify = document.querySelectorAll('.itemQuantity');
   // se repete tant qu'il y a des produit dans le panier 
@@ -112,4 +119,4 @@ function modifieQ() {
   }
 }
 
-modifieQ();
+modifieQ();*/

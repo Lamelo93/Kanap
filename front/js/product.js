@@ -136,9 +136,13 @@ function selectNumber(input) {
              * new item to add to cart
              * @return Objet json 
              */
+            let productImageSource = productImage.firstElementChild;
             let obj = {
+              imgsrc: productImageSource.src,
+              imgalt: productImageSource.alt,
                 id: Id,
                 colors: Couleur,
+                name: productName.innerHTML,
                 quantity: Number(Quantity),
 
             }
@@ -197,5 +201,5 @@ function selectNumber(input) {
             }
         }
     })};
-
+    
     console.log(localStorage);
