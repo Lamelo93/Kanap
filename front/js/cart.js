@@ -11,13 +11,13 @@ if (cart !== null) {
   cart.forEach((item) => {
     console.log(cart);
     let itemId = item.id;
-    getapi(itemId);
+    getapi(itemId, item);
   });
 } else {
   window.alert("cart is empty");
 }
 
-async function getapi(id) {
+async function getapi(id, item) {
   const response = await fetch(`${apiURL}/${id}`).catch(function (err) {
     console.error(error);
   });
@@ -25,13 +25,15 @@ async function getapi(id) {
   let data = await response.json();
   console.log(data);
 
-  let price = data.price;
-  renderCartitems(price);
+  
+  renderCartitems(data, item);
 }
 
 //Affichage des articles sélectionnés dans le panier
-function renderCartitems(price) {
-  cart.forEach((item) => {
+function renderCartitems(data, item) {
+
+
+  
     document.getElementById(
       "cart__items"
     ).innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.colors}">
@@ -42,7 +44,7 @@ function renderCartitems(price) {
           <div class="cart__item__content__description">
             <h2>${item.name}</h2>
             <p>${item.colors}</p>
-            <p>${price}</p>
+            <p>${data.price}</p>
           </div>
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
@@ -55,7 +57,6 @@ function renderCartitems(price) {
           </div>
         </div>
       </article>`;
-  });
 }
 
 //Calcul de la quantité totale d'articles dans le panier
