@@ -107,99 +107,98 @@ function selectNumber(input) {
   localStorage.setItem("cart", cartList);
 }*/
 
-
 /**
  * store products in localStorage 
   @param {} article 
  */
-  function panier(article) {
+function panier(article) {
+  const btn = document.querySelector("#addToCart");
+  btn.addEventListener("click", () => {
+    let quantity = selectedNumber;
+    let couleurs = selectedColor;
+    console.log("quantité : " + quantity);
+    console.log("couleurs : " + couleurs);
 
-    
-    const btn = document.querySelector("#addToCart");
-    btn.addEventListener("click", () => {
-        let quantity = selectedNumber;
-        let couleurs = selectedColor;
-        console.log("quantité : " + quantity);
-        console.log("couleurs : " + couleurs);
+    // check if color and quantity are not empty
+    if (couleurs != "" && quantity <= 100 && quantity != 0) {
+      // get the selected color and quantity
+      let Couleur = couleurs;
+      let Quantity = Number(quantity);
+      let Id = article._id;
 
-        // check if color and quantity are not empty
-        if (couleurs != "" && quantity <= 100 && quantity != 0) {
+      /**
+       * new item to add to cart
+       * @return Objet json
+       */
+      let productImageSource = productImage.firstElementChild;
+      let obj = {
+        imgsrc: productImageSource.src,
+        imgalt: productImageSource.alt,
+        id: Id,
+        colors: Couleur,
+        name: productName.innerHTML,
+        quantity: Number(Quantity),
+      };
+      console.log(obj);
+      /**
+       * @return the products present in localStorage.getItem('obj');
+       */
 
-            // get the selected color and quantity
-            let Couleur = couleurs;
-            let Quantity = Number(quantity);
-            let Id = article._id;
-            
+      let produitLocalStorage = JSON.parse(localStorage.getItem("obj"));
+      console.log(produitLocalStorage);
+      console.log(localStorage);
 
-
-            /**
-             * new item to add to cart
-             * @return Objet json 
-             */
-            let productImageSource = productImage.firstElementChild;
-            let obj = {
-              imgsrc: productImageSource.src,
-              imgalt: productImageSource.alt,
-                id: Id,
-                colors: Couleur,
-                name: productName.innerHTML,
-                quantity: Number(Quantity),
-
-            }
-            console.log(obj);
-            /**
-             * @return the products present in localStorage.getItem('obj');
-             */
-
-            let produitLocalStorage = JSON.parse(localStorage.getItem("obj"));
-            console.log(produitLocalStorage);
-            console.log(localStorage);
-
-
-            /**
-             * @return a confirmation box if yes redirection to the basket
-             */
-            const confirmation = () => {
-                if (window.confirm(`${Quantity} ${article.name} ${Couleur} été ajouté à votre panier !` + `Pour consulter votre panier, cliquez sur OK`)) {
-                    window.location.href = "cart.html";
-                }
-            }
-
-            // if a product is present in localStorage \\
-            if (produitLocalStorage !== null) {
-
-                /**
-                 * checks if the item is already in the cart
-                 * @return the product(s) present in productLocalStorage
-                 */
-                const Find = produitLocalStorage.find((element) => element.id === Id && element.colors === Couleur);
-                console.log(Find);
-                // if the product is already in the basket
-                if (Find) {
-                    /**
-                     * adjust the quantity of the product  
-                     * @return obj.quantity + Find.quantity
-                     */
-                    let ChangeQuantity = parseInt(obj.quantity) + parseInt(Find.quantity);
-                    Find.quantity = ChangeQuantity;
-                    localStorage.setItem("obj", JSON.stringify(produitLocalStorage));
-                    console.log("la quantités du produit est maintenant de : " + Find.quantity);
-                    confirmation();
-                    // if it is already in the basket and the color is not the same, it adds it
-                } else {
-                    produitLocalStorage.push(obj);
-                    localStorage.setItem("obj", JSON.stringify(produitLocalStorage));
-                    confirmation();
-
-                }
-                // if the product is not in the basket add it to the table
-            } else {
-                produitLocalStorage = [];
-                produitLocalStorage.push(obj);
-                localStorage.setItem("obj", JSON.stringify(produitLocalStorage));
-                confirmation()
-            }
+      /**
+       * @return a confirmation box if yes redirection to the basket
+       */
+      const confirmation = () => {
+        if (
+          window.confirm(
+            `${Quantity} ${article.name} ${Couleur} été ajouté à votre panier !` +
+              `Pour consulter votre panier, cliquez sur OK`
+          )
+        ) {
+          window.location.href = "cart.html";
         }
-    })};
-    
-    console.log(localStorage);
+      };
+
+      // if a product is present in localStorage \\
+      if (produitLocalStorage !== null) {
+        /**
+         * checks if the item is already in the cart
+         * @return the product(s) present in productLocalStorage
+         */
+        const Find = produitLocalStorage.find(
+          (element) => element.id === Id && element.colors === Couleur
+        );
+        console.log(Find);
+        // if the product is already in the basket
+        if (Find) {
+          /**
+           * adjust the quantity of the product
+           * @return obj.quantity + Find.quantity
+           */
+          let ChangeQuantity = parseInt(obj.quantity) + parseInt(Find.quantity);
+          Find.quantity = ChangeQuantity;
+          localStorage.setItem("obj", JSON.stringify(produitLocalStorage));
+          console.log(
+            "la quantités du produit est maintenant de : " + Find.quantity
+          );
+          confirmation();
+          // if it is already in the basket and the color is not the same, it adds it
+        } else {
+          produitLocalStorage.push(obj);
+          localStorage.setItem("obj", JSON.stringify(produitLocalStorage));
+          confirmation();
+        }
+        // if the product is not in the basket add it to the table
+      } else {
+        produitLocalStorage = [];
+        produitLocalStorage.push(obj);
+        localStorage.setItem("obj", JSON.stringify(produitLocalStorage));
+        confirmation();
+      }
+    }
+  });
+}
+console.log(localStorage);
