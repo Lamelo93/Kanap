@@ -201,5 +201,4 @@ function panier(article) {
     }
   });
 }
-
 console.log(localStorage);

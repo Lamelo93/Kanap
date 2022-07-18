@@ -4,19 +4,28 @@ let cartList = localStorage.getItem("obj");
 let cart = JSON.parse(cartList);
 let totalQuantity = document.getElementById("totalQuantity");
 let cartItems = document.querySelectorAll(".cart__item");
-console.log(localStorage);
+let itemQuantity = document.querySelectorAll(".itemQuantity");
+let cartQuantity = 0;
 
 //Fonctions
-if (cart !== null) {
-  cart.forEach((item) => {
-    console.log(cart);
-    let itemId = item.id;
-    getapi(itemId, item);
-  });
-} else {
-  window.alert("cart is empty");
+modifieQ();
+
+//Affichage des produits sur la page
+
+function render() {
+  if (cart !== null) {
+    cart.forEach((item) => {
+      console.log(cart);
+      let itemId = item.id;
+      getapi(itemId, item);
+
+    });
+  } else {
+    window.alert("cart is empty");
+  }
 }
 
+//Récupération des données non stockées en local
 async function getapi(id, item) {
   const response = await fetch(`${apiURL}/${id}`).catch(function (err) {
     console.error(error);
@@ -25,18 +34,14 @@ async function getapi(id, item) {
   let data = await response.json();
   console.log(data);
 
-  
   renderCartitems(data, item);
 }
 
 //Affichage des articles sélectionnés dans le panier
 function renderCartitems(data, item) {
-
-
-  
-    document.getElementById(
-      "cart__items"
-    ).innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.colors}">
+  document.getElementById(
+    "cart__items"
+  ).innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.colors}">
         <div class="cart__item__img">
           <img src="${item.imgsrc}" alt="${item.imgalt}">
         </div>
@@ -59,30 +64,42 @@ function renderCartitems(data, item) {
       </article>`;
 }
 
-//Calcul de la quantité totale d'articles dans le panier
-let itemQuantity = document.querySelectorAll(".itemQuantity");
-let cartQuantity = 0;
+/*cart.forEach((item) => {
+  cartQuantity += item.quantity;
+});*/
 
-/*function modifieQ() {
+/*itemQuantity.forEach(item => {
+   
+  item.addEventListener('change', function total(){
+    cartQuantity += Number(item.value);
+    totalQuantity.innerText += item.value - cartQuantity ;
+  });
+});*/
 
-  let modify = document.querySelectorAll('.itemQuantity');
-  // se repete tant qu'il y a des produit dans le panier 
+function modifieQ() {
+  
+  let modify = document.querySelectorAll(".itemQuantity");
+  // se repete tant qu'il y a des produit dans le panier
   for (let i = 0; i < modify.length; i++) {
-      modify[i].addEventListener('change', () => {
-          // récuperer l'id, la couleur et la quantity
-          let _ID = modify[i].closest("article").dataset.id;
-          let _COLOR = modify[i].closest("article").dataset.color;
-          let _QUANTITY = modify[i].value;
-          // renvoie le produit qui contient l'id et la couleur 
-          let produit = cart.find(element => element._id == _ID && element.colors == _COLOR);
-          produit.quantity = _QUANTITY;
-          cart[i].quantity = produit.quantity;
-          localStorage.setItem("obj", JSON.stringify(cart));
+    modify[i].addEventListener("change", () => {
+      // récuperer l'id, la couleur et la quantity
+      let _ID = modify[i].closest("article").dataset.id;
+      let _COLOR = modify[i].closest("article").dataset.color;
+      let _QUANTITY = modify[i].value;
+      // renvoie le produit qui contient l'id et la couleur
+      let produit = cart.find(
+        (element) => element.id == _ID && element.colors == _COLOR
+      );
+      produit.quantity = _QUANTITY;
+      cart[i].quantity = produit.quantity;
+      localStorage.setItem("obj", JSON.stringify(cart));
 
-          location.reload();
-
-      })
+      
+      console.log(produit.quantity);
+      location.reload();
+    });
+    totalQuantity.innerText += produit.quantity;
   }
+  render();
 }
 
-modifieQ();*/
