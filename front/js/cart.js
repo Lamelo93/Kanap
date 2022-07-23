@@ -2,22 +2,26 @@
 const apiURL = "http://localhost:3000/api/products";
 let cartList = localStorage.getItem("obj");
 let cart = JSON.parse(cartList);
-let totalQuantity = document.getElementById("totalQuantity");
+let totalQuantity = document.getElementById("totalQuantity") ;
 let cartItems = document.querySelectorAll(".cart__item");
 let itemQuantity = document.querySelectorAll(".itemQuantity");
 let cartQuantity = 0;
+let tabPrice = [];
+ let tabQuantite = [];
 
 //Fonctions
-modifieQ();
+render();
 
 //Affichage des produits sur la page
 
 function render() {
+  console.log(cart);
+  
   if (cart !== null) {
     cart.forEach((item) => {
-      console.log(cart);
       let itemId = item.id;
       getapi(itemId, item);
+      
 
     });
   } else {
@@ -37,8 +41,10 @@ async function getapi(id, item) {
   renderCartitems(data, item);
 }
 
-//Affichage des articles sélectionnés dans le panier
+//Affichage des articles sélectionnés dans le panier et du prix/quantité totale
 function renderCartitems(data, item) {
+
+
   document.getElementById(
     "cart__items"
   ).innerHTML += `<article class="cart__item" data-id="${item.id}" data-color="${item.colors}">
@@ -62,44 +68,97 @@ function renderCartitems(data, item) {
           </div>
         </div>
       </article>`;
+      
+      total(data.price, item.quantity);
+      modifieQ();
+      suppressionArticle();
+      
 }
-
-/*cart.forEach((item) => {
-  cartQuantity += item.quantity;
-});*/
 
 /*itemQuantity.forEach(item => {
    
   item.addEventListener('change', function total(){
     cartQuantity += Number(item.value);
-    totalQuantity.innerText += item.value - cartQuantity ;
+    
   });
 });*/
 
-function modifieQ() {
-  
-  let modify = document.querySelectorAll(".itemQuantity");
-  // se repete tant qu'il y a des produit dans le panier
-  for (let i = 0; i < modify.length; i++) {
-    modify[i].addEventListener("change", () => {
-      // récuperer l'id, la couleur et la quantity
-      let _ID = modify[i].closest("article").dataset.id;
-      let _COLOR = modify[i].closest("article").dataset.color;
-      let _QUANTITY = modify[i].value;
-      // renvoie le produit qui contient l'id et la couleur
-      let produit = cart.find(
-        (element) => element.id == _ID && element.colors == _COLOR
-      );
-      produit.quantity = _QUANTITY;
-      cart[i].quantity = produit.quantity;
-      localStorage.setItem("obj", JSON.stringify(cart));
+/**
+ * calcul le prix et la quantité total 
+ */
+ 
+ function total(price, quantite) {
+     console.log('price', price);
+     console.log('quantité', quantite);
+     let quantityTotal = document.getElementById('totalQuantity');
+     let prixTotal = document.getElementById('totalPrice');
+     let totalQ = 0;
+     let totalP = 0;
+     let QNumber = Number(quantite);
+     tabPrice.push({ price });
+     tabQuantite.push({ QNumber })
+     console.log(tabPrice);
+     console.log(tabQuantite);
+ 
+     for (let key in tabPrice) {
+         console.log(tabPrice[key].price)
+         totalP += (tabQuantite[key].QNumber * tabPrice[key].price);
+         totalQ += tabQuantite[key].QNumber;
+     }
+     console.log(totalP);
+     console.log(totalQ);
+ 
+ 
+     quantityTotal.innerHTML = totalQ;
+     prixTotal.innerHTML = totalP;
+ 
+ };
 
-      
-      console.log(produit.quantity);
-      location.reload();
-    });
-    totalQuantity.innerText += produit.quantity;
+// modifie la quantité
+
+function modifieQ() {
+  let modify = document.querySelectorAll('.itemQuantity');
+ 
+  
+  // se repete tant qu'il y a des produit dans le panier 
+  for (let i = 0; i < modify.length; i++) {
+      modify[i].addEventListener('change', () => {
+          // récuperer l'id, la couleur et la quantity
+          let _ID = modify[i].closest("article").dataset.id;
+          let _COLOR = modify[i].closest("article").dataset.color;
+          let _QUANTITY = modify[i].value;
+          
+          // renvoie le produit qui contient l'id et la couleur 
+          let produit = cart.find(element => element.id == _ID && element.colors == _COLOR);
+          produit.quantity = _QUANTITY;
+          cart[i].quantity = produit.quantity;
+          totalQuantity.innerText = produit.quantity;
+          localStorage.setItem("obj", JSON.stringify(cart));
+          location.reload();
+
+      })
   }
-  render();
+  
+};
+
+function suppressionArticle() {
+
+  let deleteItem = document.querySelectorAll('.deleteItem');
+
+  for (let i = 0; i < deleteItem.length; i++) {
+    deleteItem[i].addEventListener('click', () => {
+        // récuperer l'id, la couleur et la quantity
+        let _ID = deleteItem[i].closest("article").dataset.id;
+        let _COLOR = deleteItem[i].closest("article").dataset.color;
+        
+        
+        // renvoie le produit qui contient l'id et la couleur 
+        cart = cart.filter(element => element.id !== _ID || element.colors !== _COLOR);
+        localStorage.setItem("obj", JSON.stringify(cart));
+        location.reload();
+
+    })
+}
+
 }
 
