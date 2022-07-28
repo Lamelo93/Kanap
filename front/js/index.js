@@ -1,9 +1,9 @@
 //variables
 const apiURL = "http://localhost:3000/api/products";
 
-//Récupération des données produits
+//Récupération des données produits par l'API
 async function getapi(url) {
-  const response = await fetch(url) .catch (function(err) {
+  const response = await fetch(url).catch(function (err) {
     console.error(error);
   });
 
@@ -26,6 +26,6 @@ function show(data) {
   });
 }
 
-//afficher éléments
+//Afficher les éléments de la page d'accueil
 
 getapi(apiURL);
