@@ -166,6 +166,8 @@ function panier(article) {
         localStorage.setItem("obj", JSON.stringify(produitLocalStorage));
         confirmation();
       }
+    } else {
+      window.alert("Merci de sélectionner au moins une couleur et une quantité supérieure à 0 article(s)");
     }
   });
 }

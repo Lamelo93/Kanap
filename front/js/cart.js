@@ -31,7 +31,7 @@ let emailRegex = new RegExp(
 
 //Fonctions
 render();
-order();
+
 
 //Affichage des produits sur la page
 
@@ -88,7 +88,7 @@ function renderCartitems(data, item) {
       </article>`;
 
   total(data.price, item.quantity);
-
+  
   suppressionArticle();
 }
 
@@ -318,13 +318,13 @@ function order() {
         "content-type": "application/json",
       },
     };
-    // envoie de l'objet contact et du tableau des id de chaque produit present l'or de la commande
+    // envoie de l'objet contact et du tableau des id de chaque produit present lors de la commande
     console.log(verify());
     if (verify()) {
       if (cart !== null) {
         if (cart.length >= 1) {
           fetch("http://localhost:3000/api/products//order", options)
-            .then((response) => response.json())
+            .then((response) =>response.json())
 
             .then((res) => {
               console.log(res.orderId);
@@ -344,3 +344,5 @@ function order() {
     }
   });
 }
+
+order();
